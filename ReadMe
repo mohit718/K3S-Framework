@@ -1,0 +1,36 @@
+0. Prerequisites
+  0.1 Install Python 3
+    > snap install python38
+    
+  0.2 Download and Install gcloud sdk
+    > echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    > sudo apt-get install apt-transport-https ca-certificates gnupg curl
+    > curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+    > sudo apt-get update && sudo apt-get install google-cloud-sdk
+    > gcloud init
+    > gcloud config set project k3s-deployment
+
+  0.3 Download and Install docker
+    > sudo apt install apt-transport-https ca-certificates curl software-properties-common
+    > curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    > sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    > sudo apt update
+    > apt-cache policy docker-ce
+    > sudo apt install docker-ce
+  
+  0.4 Add your public key to gcloud compute  
+    > Goto GCP dashboard
+    > Navigate to Compute Engine > Metadata > SSH Keys
+    > Add your ssh keys here
+
+1. Build Your Docker Image
+  
+  1.1 Build image using DockerFile
+    > docker build -t mohitsoni98/k3s .
+  
+  1.2 Push Image to DockerHub
+    > docker login
+    > docker push mohitsoni98/k3s
+  
+2. Run the script with valid arguments
+  > ./deploy.sh -action <create|delete> -name <CLUSTER_NAME> -key <PRIVATE_KEY> -image <DOCKER_IMAGE_NAME> -port <OPEN_PORT_FOR_APP>
